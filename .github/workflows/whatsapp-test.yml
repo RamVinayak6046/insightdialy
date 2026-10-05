@@ -13,6 +13,7 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           RECIPIENT: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
+
         run: |
           python3 <<'PY'
           import os
@@ -41,11 +42,11 @@ jobs:
                           "parameters": [
                               {
                                   "type": "text",
-                                  "text": "Vinayak"
+                                  "text": "John Doe"
                               },
                               {
                                   "type": "text",
-                                  "text": "NEWS-001"
+                                  "text": "123456"
                               },
                               {
                                   "type": "text",

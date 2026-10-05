@@ -21,12 +21,12 @@ jobs:
 
           articles = root.findall(".//item")[:5]
 
-          message = "📰 *Daily News Hub — Test Briefing*\\n\\n"
+          message = "📰 Daily News Hub — Test Briefing\n\n"
 
           for i, article in enumerate(articles, 1):
               title = article.findtext("title", "No title")
               link = article.findtext("link", "")
-              message += f"{i}. {title}\\n{link}\\n\\n"
+              message += f"{i}. {title}\n{link}\n\n"
 
           with open("news.txt", "w", encoding="utf-8") as f:
               f.write(message)
@@ -40,9 +40,7 @@ jobs:
           PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           RECIPIENT: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
         run: |
-          MESSAGE=$(cat news.txt)
-
-          python - <<'PY' > payload.json
+          python - <<PY
           import json
 
           message = open("news.txt", encoding="utf-8").read()
@@ -57,7 +55,8 @@ jobs:
               }
           }
 
-          print(json.dumps(payload))
+          with open("payload.json", "w", encoding="utf-8") as f:
+              json.dump(payload, f)
           PY
 
           curl -X POST \

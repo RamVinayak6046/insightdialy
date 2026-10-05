@@ -1,66 +1,50 @@
-name: Daily News WhatsApp
+name: WhatsApp Template Test
 
 on:
   workflow_dispatch:
 
 jobs:
-  send-news:
+  send-template:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Fetch latest news
-        run: |
-          python - <<'PY'
-          import urllib.request
-          import xml.etree.ElementTree as ET
-
-          url = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en"
-
-          data = urllib.request.urlopen(url, timeout=20).read()
-          root = ET.fromstring(data)
-
-          articles = root.findall(".//item")[:5]
-
-          message = "📰 Daily News Hub — Test Briefing\n\n"
-
-          for i, article in enumerate(articles, 1):
-              title = article.findtext("title", "No title")
-              link = article.findtext("link", "")
-              message += f"{i}. {title}\n{link}\n\n"
-
-          with open("news.txt", "w", encoding="utf-8") as f:
-              f.write(message)
-
-          print(message)
-          PY
-
-      - name: Send news to WhatsApp
+      - name: Send WhatsApp template
         env:
           ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           RECIPIENT: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
         run: |
-          python - <<PY
-          import json
-
-          message = open("news.txt", encoding="utf-8").read()
-
-          payload = {
-              "messaging_product": "whatsapp",
-              "to": "${RECIPIENT}",
-              "type": "text",
-              "text": {
-                  "preview_url": True,
-                  "body": message
-              }
-          }
-
-          with open("payload.json", "w", encoding="utf-8") as f:
-              json.dump(payload, f)
-          PY
-
           curl -X POST \
-            "https://graph.facebook.com/v23.0/${PHONE_NUMBER_ID}/messages" \
+            "https://graph.facebook.com/v25.0/${PHONE_NUMBER_ID}/messages" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
             -H "Content-Type: application/json" \
-            --data @payload.json
+            -d "{
+              \"messaging_product\": \"whatsapp\",
+              \"to\": \"${RECIPIENT}\",
+              \"type\": \"template\",
+              \"template\": {
+                \"name\": \"jasper_market_order_confirmation\",
+                \"language\": {
+                  \"code\": \"en_US\"
+                },
+                \"components\": [
+                  {
+                    \"type\": \"body\",
+                    \"parameters\": [
+                      {
+                        \"type\": \"text\",
+                        \"text\": \"Vinayak\"
+                      },
+                      {
+                        \"type\": \"text\",
+                        \"text\": \"NEWS-001\"
+                      },
+                      {
+                        \"type\": \"text\",
+                        \"text\": \"Oct 5, 2026\"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }"

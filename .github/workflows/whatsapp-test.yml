@@ -1,32 +1,67 @@
-
-name: WhatsApp Test
+name: Daily News WhatsApp
 
 on:
   workflow_dispatch:
 
 jobs:
-  send-test:
+  send-news:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send WhatsApp test
+      - name: Fetch latest news
+        run: |
+          python - <<'PY'
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          url = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en"
+
+          data = urllib.request.urlopen(url, timeout=20).read()
+          root = ET.fromstring(data)
+
+          articles = root.findall(".//item")[:5]
+
+          message = "📰 *Daily News Hub — Test Briefing*\\n\\n"
+
+          for i, article in enumerate(articles, 1):
+              title = article.findtext("title", "No title")
+              link = article.findtext("link", "")
+              message += f"{i}. {title}\\n{link}\\n\\n"
+
+          with open("news.txt", "w", encoding="utf-8") as f:
+              f.write(message)
+
+          print(message)
+          PY
+
+      - name: Send news to WhatsApp
         env:
           ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
           PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           RECIPIENT: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
         run: |
+          MESSAGE=$(cat news.txt)
+
+          python - <<'PY' > payload.json
+          import json
+
+          message = open("news.txt", encoding="utf-8").read()
+
+          payload = {
+              "messaging_product": "whatsapp",
+              "to": "${RECIPIENT}",
+              "type": "text",
+              "text": {
+                  "preview_url": True,
+                  "body": message
+              }
+          }
+
+          print(json.dumps(payload))
+          PY
+
           curl -X POST \
             "https://graph.facebook.com/v23.0/${PHONE_NUMBER_ID}/messages" \
             -H "Authorization: Bearer ${ACCESS_TOKEN}" \
             -H "Content-Type: application/json" \
-            -d "{
-              \"messaging_product\": \"whatsapp\",
-              \"to\": \"${RECIPIENT}\",
-              \"type\": \"template\",
-              \"template\": {
-                \"name\": \"hello_world\",
-                \"language\": {
-                  \"code\": \"en_US\"
-                }
-              }
-            }"
+            --data @payload.json

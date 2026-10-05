@@ -23,7 +23,7 @@ jobs:
               \"to\": \"${RECIPIENT}\",
               \"type\": \"template\",
               \"template\": {
-                \"name\": \"jasper_market_order_confirmation\",
+                \"name": "jaspers_market_order_confirmation_v1",
                 \"language\": {
                   \"code\": \"en_US\"
                 },

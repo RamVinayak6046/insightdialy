@@ -14,37 +14,70 @@ jobs:
           PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
           RECIPIENT: ${{ secrets.WHATSAPP_RECIPIENT_PHONE }}
         run: |
-          curl -X POST \
-            "https://graph.facebook.com/v25.0/${PHONE_NUMBER_ID}/messages" \
-            -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-            -H "Content-Type: application/json" \
-            -d "{
-              \"messaging_product\": \"whatsapp\",
-              \"to\": \"${RECIPIENT}\",
-              \"type\": \"template\",
-              \"template\": {
-                \"name": "jaspers_market_order_confirmation_v1",
-                \"language\": {
-                  \"code\": \"en_US\"
-                },
-                \"components\": [
-                  {
-                    \"type\": \"body\",
-                    \"parameters\": [
+          python3 <<'PY'
+          import os
+          import json
+          import urllib.request
+          import urllib.error
+
+          access_token = os.environ["ACCESS_TOKEN"]
+          phone_number_id = os.environ["PHONE_NUMBER_ID"]
+          recipient = os.environ["RECIPIENT"]
+
+          url = f"https://graph.facebook.com/v25.0/{phone_number_id}/messages"
+
+          payload = {
+              "messaging_product": "whatsapp",
+              "to": recipient,
+              "type": "template",
+              "template": {
+                  "name": "jaspers_market_order_confirmation_v1",
+                  "language": {
+                      "code": "en_US"
+                  },
+                  "components": [
                       {
-                        \"type\": \"text\",
-                        \"text\": \"Vinayak\"
-                      },
-                      {
-                        \"type\": \"text\",
-                        \"text\": \"NEWS-001\"
-                      },
-                      {
-                        \"type\": \"text\",
-                        \"text\": \"Oct 5, 2026\"
+                          "type": "body",
+                          "parameters": [
+                              {
+                                  "type": "text",
+                                  "text": "Vinayak"
+                              },
+                              {
+                                  "type": "text",
+                                  "text": "NEWS-001"
+                              },
+                              {
+                                  "type": "text",
+                                  "text": "Oct 5, 2026"
+                              }
+                          ]
                       }
-                    ]
-                  }
-                ]
+                  ]
               }
-            }"
+          }
+
+          data = json.dumps(payload).encode("utf-8")
+
+          request = urllib.request.Request(
+              url,
+              data=data,
+              method="POST",
+              headers={
+                  "Authorization": f"Bearer {access_token}",
+                  "Content-Type": "application/json"
+              }
+          )
+
+          try:
+              with urllib.request.urlopen(request) as response:
+                  result = response.read().decode("utf-8")
+                  print("HTTP STATUS:", response.status)
+                  print("META RESPONSE:", result)
+
+          except urllib.error.HTTPError as e:
+              result = e.read().decode("utf-8")
+              print("HTTP STATUS:", e.code)
+              print("META ERROR:", result)
+              raise
+          PY

@@ -1,0 +1,85 @@
+{
+  "name": "Article",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "description": "Link to the original article (sourceUrl)"
+    },
+    "source": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "education",
+        "jobs",
+        "tech",
+        "business",
+        "government",
+        "sports",
+        "weather",
+        "alerts"
+      ]
+    },
+    "region": {
+      "type": "string",
+      "enum": [
+        "india",
+        "global"
+      ],
+      "default": "india"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "publishedAt"
+    },
+    "fetched_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "fetched_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "fetchedAt"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "imageUrl"
+    },
+    "importance": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "relevance": {
+      "type": "number",
+      "description": "AI relevance score 0-100 (higher = more relevant)"
+    },
+    "is_alert": {
+      "type": "boolean",
+      "default": false
+    },
+    "bookmarked": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "title",
+    "url",
+    "category"
+  ]
+}

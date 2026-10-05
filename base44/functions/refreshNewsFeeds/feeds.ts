@@ -1,0 +1,21 @@
+// Default reliable feeds. Some may be down on any given run; failures are skipped.
+export const DEFAULT_FEEDS = [
+  { name: "The Hindu", url: "https://www.thehindu.com/education/feeder/default.rss", category: "education", region: "india" },
+  { name: "Times of India", url: "https://timesofindia.indiatimes.com/rssfeeds/913168846.cms", category: "education", region: "india" },
+  { name: "Hindustan Times", url: "https://www.hindustantimes.com/feeds/rss/education/rssfeed.xml", category: "education", region: "india" },
+  { name: "BBC News", url: "https://feeds.bbci.co.uk/news/education/rss.xml", category: "education", region: "global" },
+  { name: "Economic Times", url: "https://economictimes.indiatimes.com/jobs/rssfeeds/107115.cms", category: "jobs", region: "india" },
+  { name: "Times of India", url: "https://timesofindia.indiatimes.com/rssfeeds/-2128932452.cms", category: "jobs", region: "india" },
+  { name: "The Hindu", url: "https://www.thehindu.com/sci-tech/technology/feeder/default.rss", category: "tech", region: "india" },
+  { name: "TechCrunch", url: "https://techcrunch.com/category/artificial-intelligence/feed/", category: "tech", region: "global" },
+  { name: "BBC News", url: "https://feeds.bbci.co.uk/news/technology/rss.xml", category: "tech", region: "global" },
+  { name: "The Hindu", url: "https://www.thehindu.com/business/feeder/default.rss", category: "business", region: "india" },
+  { name: "Economic Times", url: "https://economictimes.indiatimes.com/rssfeedstopstories.cms", category: "business", region: "india" },
+  { name: "BBC News", url: "https://feeds.bbci.co.uk/news/business/rss.xml", category: "business", region: "global" },
+  { name: "The Hindu", url: "https://www.thehindu.com/news/national/feeder/default.rss", category: "government", region: "india" },
+  { name: "PIB", url: "https://pib.gov.in/RssMain.aspx?ModId=6&Lang=1&Regid=3", category: "government", region: "india" },
+  { name: "The Hindu", url: "https://www.thehindu.com/sport/feeder/default.rss", category: "sports", region: "india" },
+  { name: "BBC Sport", url: "https://feeds.bbci.co.uk/sport/rss.xml", category: "sports", region: "global" },
+  { name: "NDTV", url: "https://feeds.feedburner.com/ndtvnews-top-stories", category: "alerts", region: "india" },
+  { name: "BBC News", url: "https://feeds.bbci.co.uk/news/world/rss.xml", category: "alerts", region: "global" },
+];

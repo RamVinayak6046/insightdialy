@@ -1,0 +1,14 @@
+{
+  "name": "refreshNewsFeeds",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "every_hour",
+      "schedule_mode": "recurring",
+      "schedule_type": "simple",
+      "repeat_unit": "hours",
+      "repeat_interval": 1
+    }
+  ]
+}

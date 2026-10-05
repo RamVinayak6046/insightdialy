@@ -1,0 +1,71 @@
+{
+  "name": "NewsSource",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "ai_search",
+        "rss",
+        "rest_api"
+      ],
+      "default": "ai_search"
+    },
+    "endpoint_url": {
+      "type": "string",
+      "description": "Feed or API URL (rss / rest_api types)"
+    },
+    "secret_name": {
+      "type": "string",
+      "description": "Name of the backend secret holding the API key. Never the key itself."
+    },
+    "preferred_domains": {
+      "type": "string",
+      "description": "Comma separated publisher domains to prefer"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "education",
+          "jobs",
+          "tech",
+          "business",
+          "government",
+          "sports",
+          "weather",
+          "alerts"
+        ]
+      },
+      "description": "Empty means all categories"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "hourly",
+        "daily"
+      ],
+      "default": "manual"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_fetched_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ]
+}

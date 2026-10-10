@@ -1,0 +1,16 @@
+{
+  "name": "dailyBriefingWhatsApp",
+  "entry": "entry.ts",
+  "automations": [
+    {
+      "type": "scheduled",
+      "name": "daily_7am_ist",
+      "is_active": true,
+      "schedule_mode": "recurring",
+      "schedule_type": "simple",
+      "repeat_unit": "days",
+      "repeat_interval": 1,
+      "start_time": "01:30"
+    }
+  ]
+}
